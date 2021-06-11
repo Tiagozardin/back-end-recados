@@ -34,10 +34,7 @@ app.post("/user", validarNome, validarPassword, (request: Request, response: Res
  
   users.push(user);
 
-  return response.status(201).json({
-    success: true,
-    data: user,
-  });
+  return response.status(200).json({ msg:"Cadastrado com sucesso"});
 });
 
 app.post("/login", (request: Request, response: Response) => {
@@ -76,6 +73,28 @@ app.post("/recado", validarTitle, validarDetail, (request: Request, response: Re
   recados.push(list);
   return response.status(200).json({msg:"Recado cadastrado com sucesso"});
 });
+
+app.get("/recado/:id", (request: Request, response: Response) => {
+  const { id }: { id?: string} = request.params;
+
+  const idInt: number = parseInt(id);
+
+  const ids = recados.find((f) => {
+    return f.id === idInt;
+    });
+
+  if(!ids){
+      return response.status(404).json({
+        msg: "Usuário não encontrado"
+      });
+  }
+ 
+  return response.status(200).json({
+    success: true,
+    data: ids});
+});
+
+
 
 // Atualizar um registro específico -- Insominia PUT
 app.put("/recado/:id", validarTitle, validarDetail, (request: Request, response: Response) => {
